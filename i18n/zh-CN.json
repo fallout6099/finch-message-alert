@@ -1,0 +1,913 @@
+{
+  "name": "Finch消息提醒",
+  "description": "给 Finch 加上提示音和刘海小鸟：任务完成、中断、失败、等待确认等事件可分别配置系统音、14 种趣味音效或自定义音频；任务完成时，Finch 小鸟背着小邮包从刘海里钻出来，在菜单栏刘海左侧蹦跳、做小动作，点它直接打开那个会话。仅支持 macOS。",
+  "contributes": {
+    "settingsMenu": {
+      "tooltip": "Finch消息提醒"
+    }
+  },
+  "settings": {
+    "fields": {
+      "enabled": {
+        "label": "开启提示音"
+      },
+      "volume": {
+        "label": "音量（0-100）"
+      },
+      "onlyWhenUnviewed": {
+        "label": "只在没看该会话时响",
+        "description": "Finch 不在前台，或该会话有未读结果时才响"
+      },
+      "alwaysRing": {
+        "label": "这些事件即使正在看也响",
+        "description": "中断通常是你自己按的，默认总是响",
+        "options": {
+          "completed": {
+            "label": "任务完成"
+          },
+          "interrupted": {
+            "label": "任务中断"
+          },
+          "failed": {
+            "label": "出错失败"
+          },
+          "waiting": {
+            "label": "等待确认"
+          },
+          "started": {
+            "label": "任务开始"
+          },
+          "retry": {
+            "label": "自动重试"
+          },
+          "compacted": {
+            "label": "上下文压缩完成"
+          },
+          "toolError": {
+            "label": "工具报错"
+          }
+        }
+      },
+      "quietHours": {
+        "label": "免打扰时段",
+        "placeholder": "例如 23:00-08:00，留空不启用"
+      },
+      "notchBird": {
+        "label": "刘海送信小鸟",
+        "description": "事件发生时，Finch 小鸟背着小邮包从刘海里钻出来，在刘海左侧的菜单栏黑边里蹦跳、伸懒腰、哼歌、打盹；鼠标移上去它会亮出信，点它直接打开那个会话"
+      },
+      "notchBirdEvents": {
+        "label": "哪些事件放飞小鸟",
+        "options": {
+          "completed": {
+            "label": "任务完成"
+          },
+          "interrupted": {
+            "label": "任务中断"
+          },
+          "failed": {
+            "label": "出错失败"
+          },
+          "waiting": {
+            "label": "等待确认"
+          },
+          "started": {
+            "label": "任务开始"
+          },
+          "retry": {
+            "label": "自动重试"
+          },
+          "compacted": {
+            "label": "上下文压缩完成"
+          },
+          "toolError": {
+            "label": "工具报错"
+          }
+        }
+      },
+      "notchBirdSeconds": {
+        "label": "小鸟停留秒数"
+      },
+      "completedSound": {
+        "label": "任务完成 · 声音",
+        "description": "Agent 一轮任务跑完时",
+        "options": {
+          "none": {
+            "label": "不响"
+          },
+          "fun:cooking-done": {
+            "label": "趣味 · 料理出锅（咕嘟+叮咚）"
+          },
+          "fun:treasure": {
+            "label": "趣味 · 宝箱开启"
+          },
+          "fun:level-up": {
+            "label": "趣味 · 升级"
+          },
+          "fun:power-up": {
+            "label": "趣味 · 8-bit 能量充满"
+          },
+          "fun:coin": {
+            "label": "趣味 · 拾取金币"
+          },
+          "fun:magic-sparkle": {
+            "label": "趣味 · 魔法闪烁"
+          },
+          "fun:finch-chirp": {
+            "label": "趣味 · 小雀啾啾"
+          },
+          "fun:kalimba": {
+            "label": "趣味 · 拇指琴三连"
+          },
+          "fun:service-bell": {
+            "label": "趣味 · 柜台服务铃"
+          },
+          "fun:knock-knock": {
+            "label": "趣味 · 敲门两下"
+          },
+          "fun:typewriter-ding": {
+            "label": "趣味 · 打字机叮"
+          },
+          "fun:bubble-pop": {
+            "label": "趣味 · 水泡啵"
+          },
+          "fun:wah-wah": {
+            "label": "趣味 · 失败哇哇哇"
+          },
+          "fun:temple-bell": {
+            "label": "趣味 · 寺院钟声"
+          },
+          "Basso": {
+            "label": "系统音 · Basso"
+          },
+          "Blow": {
+            "label": "系统音 · Blow"
+          },
+          "Bottle": {
+            "label": "系统音 · Bottle"
+          },
+          "Frog": {
+            "label": "系统音 · Frog"
+          },
+          "Funk": {
+            "label": "系统音 · Funk"
+          },
+          "Glass": {
+            "label": "系统音 · Glass"
+          },
+          "Hero": {
+            "label": "系统音 · Hero"
+          },
+          "Morse": {
+            "label": "系统音 · Morse"
+          },
+          "Ping": {
+            "label": "系统音 · Ping"
+          },
+          "Pop": {
+            "label": "系统音 · Pop"
+          },
+          "Purr": {
+            "label": "系统音 · Purr"
+          },
+          "Sosumi": {
+            "label": "系统音 · Sosumi"
+          },
+          "Submarine": {
+            "label": "系统音 · Submarine"
+          },
+          "Tink": {
+            "label": "系统音 · Tink"
+          },
+          "custom": {
+            "label": "自定义音频文件"
+          }
+        }
+      },
+      "completedCustom": {
+        "label": "任务完成 · 自定义音频路径",
+        "placeholder": "选择“自定义音频文件”时填写，如 ~/Music/done.mp3"
+      },
+      "interruptedSound": {
+        "label": "任务中断 · 声音",
+        "description": "你按了停止 / Esc 中断任务时",
+        "options": {
+          "none": {
+            "label": "不响"
+          },
+          "fun:cooking-done": {
+            "label": "趣味 · 料理出锅（咕嘟+叮咚）"
+          },
+          "fun:treasure": {
+            "label": "趣味 · 宝箱开启"
+          },
+          "fun:level-up": {
+            "label": "趣味 · 升级"
+          },
+          "fun:power-up": {
+            "label": "趣味 · 8-bit 能量充满"
+          },
+          "fun:coin": {
+            "label": "趣味 · 拾取金币"
+          },
+          "fun:magic-sparkle": {
+            "label": "趣味 · 魔法闪烁"
+          },
+          "fun:finch-chirp": {
+            "label": "趣味 · 小雀啾啾"
+          },
+          "fun:kalimba": {
+            "label": "趣味 · 拇指琴三连"
+          },
+          "fun:service-bell": {
+            "label": "趣味 · 柜台服务铃"
+          },
+          "fun:knock-knock": {
+            "label": "趣味 · 敲门两下"
+          },
+          "fun:typewriter-ding": {
+            "label": "趣味 · 打字机叮"
+          },
+          "fun:bubble-pop": {
+            "label": "趣味 · 水泡啵"
+          },
+          "fun:wah-wah": {
+            "label": "趣味 · 失败哇哇哇"
+          },
+          "fun:temple-bell": {
+            "label": "趣味 · 寺院钟声"
+          },
+          "Basso": {
+            "label": "系统音 · Basso"
+          },
+          "Blow": {
+            "label": "系统音 · Blow"
+          },
+          "Bottle": {
+            "label": "系统音 · Bottle"
+          },
+          "Frog": {
+            "label": "系统音 · Frog"
+          },
+          "Funk": {
+            "label": "系统音 · Funk"
+          },
+          "Glass": {
+            "label": "系统音 · Glass"
+          },
+          "Hero": {
+            "label": "系统音 · Hero"
+          },
+          "Morse": {
+            "label": "系统音 · Morse"
+          },
+          "Ping": {
+            "label": "系统音 · Ping"
+          },
+          "Pop": {
+            "label": "系统音 · Pop"
+          },
+          "Purr": {
+            "label": "系统音 · Purr"
+          },
+          "Sosumi": {
+            "label": "系统音 · Sosumi"
+          },
+          "Submarine": {
+            "label": "系统音 · Submarine"
+          },
+          "Tink": {
+            "label": "系统音 · Tink"
+          },
+          "custom": {
+            "label": "自定义音频文件"
+          }
+        }
+      },
+      "interruptedCustom": {
+        "label": "任务中断 · 自定义音频路径",
+        "placeholder": "选择“自定义音频文件”时填写，如 ~/Music/done.mp3"
+      },
+      "failedSound": {
+        "label": "出错失败 · 声音",
+        "description": "模型或运行报错导致任务失败时",
+        "options": {
+          "none": {
+            "label": "不响"
+          },
+          "fun:cooking-done": {
+            "label": "趣味 · 料理出锅（咕嘟+叮咚）"
+          },
+          "fun:treasure": {
+            "label": "趣味 · 宝箱开启"
+          },
+          "fun:level-up": {
+            "label": "趣味 · 升级"
+          },
+          "fun:power-up": {
+            "label": "趣味 · 8-bit 能量充满"
+          },
+          "fun:coin": {
+            "label": "趣味 · 拾取金币"
+          },
+          "fun:magic-sparkle": {
+            "label": "趣味 · 魔法闪烁"
+          },
+          "fun:finch-chirp": {
+            "label": "趣味 · 小雀啾啾"
+          },
+          "fun:kalimba": {
+            "label": "趣味 · 拇指琴三连"
+          },
+          "fun:service-bell": {
+            "label": "趣味 · 柜台服务铃"
+          },
+          "fun:knock-knock": {
+            "label": "趣味 · 敲门两下"
+          },
+          "fun:typewriter-ding": {
+            "label": "趣味 · 打字机叮"
+          },
+          "fun:bubble-pop": {
+            "label": "趣味 · 水泡啵"
+          },
+          "fun:wah-wah": {
+            "label": "趣味 · 失败哇哇哇"
+          },
+          "fun:temple-bell": {
+            "label": "趣味 · 寺院钟声"
+          },
+          "Basso": {
+            "label": "系统音 · Basso"
+          },
+          "Blow": {
+            "label": "系统音 · Blow"
+          },
+          "Bottle": {
+            "label": "系统音 · Bottle"
+          },
+          "Frog": {
+            "label": "系统音 · Frog"
+          },
+          "Funk": {
+            "label": "系统音 · Funk"
+          },
+          "Glass": {
+            "label": "系统音 · Glass"
+          },
+          "Hero": {
+            "label": "系统音 · Hero"
+          },
+          "Morse": {
+            "label": "系统音 · Morse"
+          },
+          "Ping": {
+            "label": "系统音 · Ping"
+          },
+          "Pop": {
+            "label": "系统音 · Pop"
+          },
+          "Purr": {
+            "label": "系统音 · Purr"
+          },
+          "Sosumi": {
+            "label": "系统音 · Sosumi"
+          },
+          "Submarine": {
+            "label": "系统音 · Submarine"
+          },
+          "Tink": {
+            "label": "系统音 · Tink"
+          },
+          "custom": {
+            "label": "自定义音频文件"
+          }
+        }
+      },
+      "failedCustom": {
+        "label": "出错失败 · 自定义音频路径",
+        "placeholder": "选择“自定义音频文件”时填写，如 ~/Music/done.mp3"
+      },
+      "waitingSound": {
+        "label": "等待确认 · 声音",
+        "description": "弹出权限卡、提问卡或表单等你处理时",
+        "options": {
+          "none": {
+            "label": "不响"
+          },
+          "fun:cooking-done": {
+            "label": "趣味 · 料理出锅（咕嘟+叮咚）"
+          },
+          "fun:treasure": {
+            "label": "趣味 · 宝箱开启"
+          },
+          "fun:level-up": {
+            "label": "趣味 · 升级"
+          },
+          "fun:power-up": {
+            "label": "趣味 · 8-bit 能量充满"
+          },
+          "fun:coin": {
+            "label": "趣味 · 拾取金币"
+          },
+          "fun:magic-sparkle": {
+            "label": "趣味 · 魔法闪烁"
+          },
+          "fun:finch-chirp": {
+            "label": "趣味 · 小雀啾啾"
+          },
+          "fun:kalimba": {
+            "label": "趣味 · 拇指琴三连"
+          },
+          "fun:service-bell": {
+            "label": "趣味 · 柜台服务铃"
+          },
+          "fun:knock-knock": {
+            "label": "趣味 · 敲门两下"
+          },
+          "fun:typewriter-ding": {
+            "label": "趣味 · 打字机叮"
+          },
+          "fun:bubble-pop": {
+            "label": "趣味 · 水泡啵"
+          },
+          "fun:wah-wah": {
+            "label": "趣味 · 失败哇哇哇"
+          },
+          "fun:temple-bell": {
+            "label": "趣味 · 寺院钟声"
+          },
+          "Basso": {
+            "label": "系统音 · Basso"
+          },
+          "Blow": {
+            "label": "系统音 · Blow"
+          },
+          "Bottle": {
+            "label": "系统音 · Bottle"
+          },
+          "Frog": {
+            "label": "系统音 · Frog"
+          },
+          "Funk": {
+            "label": "系统音 · Funk"
+          },
+          "Glass": {
+            "label": "系统音 · Glass"
+          },
+          "Hero": {
+            "label": "系统音 · Hero"
+          },
+          "Morse": {
+            "label": "系统音 · Morse"
+          },
+          "Ping": {
+            "label": "系统音 · Ping"
+          },
+          "Pop": {
+            "label": "系统音 · Pop"
+          },
+          "Purr": {
+            "label": "系统音 · Purr"
+          },
+          "Sosumi": {
+            "label": "系统音 · Sosumi"
+          },
+          "Submarine": {
+            "label": "系统音 · Submarine"
+          },
+          "Tink": {
+            "label": "系统音 · Tink"
+          },
+          "custom": {
+            "label": "自定义音频文件"
+          }
+        }
+      },
+      "waitingCustom": {
+        "label": "等待确认 · 自定义音频路径",
+        "placeholder": "选择“自定义音频文件”时填写，如 ~/Music/done.mp3"
+      },
+      "startedSound": {
+        "label": "任务开始 · 声音",
+        "description": "任务开始运行时（适合定时任务、后台任务）",
+        "options": {
+          "none": {
+            "label": "不响"
+          },
+          "fun:cooking-done": {
+            "label": "趣味 · 料理出锅（咕嘟+叮咚）"
+          },
+          "fun:treasure": {
+            "label": "趣味 · 宝箱开启"
+          },
+          "fun:level-up": {
+            "label": "趣味 · 升级"
+          },
+          "fun:power-up": {
+            "label": "趣味 · 8-bit 能量充满"
+          },
+          "fun:coin": {
+            "label": "趣味 · 拾取金币"
+          },
+          "fun:magic-sparkle": {
+            "label": "趣味 · 魔法闪烁"
+          },
+          "fun:finch-chirp": {
+            "label": "趣味 · 小雀啾啾"
+          },
+          "fun:kalimba": {
+            "label": "趣味 · 拇指琴三连"
+          },
+          "fun:service-bell": {
+            "label": "趣味 · 柜台服务铃"
+          },
+          "fun:knock-knock": {
+            "label": "趣味 · 敲门两下"
+          },
+          "fun:typewriter-ding": {
+            "label": "趣味 · 打字机叮"
+          },
+          "fun:bubble-pop": {
+            "label": "趣味 · 水泡啵"
+          },
+          "fun:wah-wah": {
+            "label": "趣味 · 失败哇哇哇"
+          },
+          "fun:temple-bell": {
+            "label": "趣味 · 寺院钟声"
+          },
+          "Basso": {
+            "label": "系统音 · Basso"
+          },
+          "Blow": {
+            "label": "系统音 · Blow"
+          },
+          "Bottle": {
+            "label": "系统音 · Bottle"
+          },
+          "Frog": {
+            "label": "系统音 · Frog"
+          },
+          "Funk": {
+            "label": "系统音 · Funk"
+          },
+          "Glass": {
+            "label": "系统音 · Glass"
+          },
+          "Hero": {
+            "label": "系统音 · Hero"
+          },
+          "Morse": {
+            "label": "系统音 · Morse"
+          },
+          "Ping": {
+            "label": "系统音 · Ping"
+          },
+          "Pop": {
+            "label": "系统音 · Pop"
+          },
+          "Purr": {
+            "label": "系统音 · Purr"
+          },
+          "Sosumi": {
+            "label": "系统音 · Sosumi"
+          },
+          "Submarine": {
+            "label": "系统音 · Submarine"
+          },
+          "Tink": {
+            "label": "系统音 · Tink"
+          },
+          "custom": {
+            "label": "自定义音频文件"
+          }
+        }
+      },
+      "startedCustom": {
+        "label": "任务开始 · 自定义音频路径",
+        "placeholder": "选择“自定义音频文件”时填写，如 ~/Music/done.mp3"
+      },
+      "retrySound": {
+        "label": "自动重试 · 声音",
+        "description": "请求失败、正在等待自动重试时",
+        "options": {
+          "none": {
+            "label": "不响"
+          },
+          "fun:cooking-done": {
+            "label": "趣味 · 料理出锅（咕嘟+叮咚）"
+          },
+          "fun:treasure": {
+            "label": "趣味 · 宝箱开启"
+          },
+          "fun:level-up": {
+            "label": "趣味 · 升级"
+          },
+          "fun:power-up": {
+            "label": "趣味 · 8-bit 能量充满"
+          },
+          "fun:coin": {
+            "label": "趣味 · 拾取金币"
+          },
+          "fun:magic-sparkle": {
+            "label": "趣味 · 魔法闪烁"
+          },
+          "fun:finch-chirp": {
+            "label": "趣味 · 小雀啾啾"
+          },
+          "fun:kalimba": {
+            "label": "趣味 · 拇指琴三连"
+          },
+          "fun:service-bell": {
+            "label": "趣味 · 柜台服务铃"
+          },
+          "fun:knock-knock": {
+            "label": "趣味 · 敲门两下"
+          },
+          "fun:typewriter-ding": {
+            "label": "趣味 · 打字机叮"
+          },
+          "fun:bubble-pop": {
+            "label": "趣味 · 水泡啵"
+          },
+          "fun:wah-wah": {
+            "label": "趣味 · 失败哇哇哇"
+          },
+          "fun:temple-bell": {
+            "label": "趣味 · 寺院钟声"
+          },
+          "Basso": {
+            "label": "系统音 · Basso"
+          },
+          "Blow": {
+            "label": "系统音 · Blow"
+          },
+          "Bottle": {
+            "label": "系统音 · Bottle"
+          },
+          "Frog": {
+            "label": "系统音 · Frog"
+          },
+          "Funk": {
+            "label": "系统音 · Funk"
+          },
+          "Glass": {
+            "label": "系统音 · Glass"
+          },
+          "Hero": {
+            "label": "系统音 · Hero"
+          },
+          "Morse": {
+            "label": "系统音 · Morse"
+          },
+          "Ping": {
+            "label": "系统音 · Ping"
+          },
+          "Pop": {
+            "label": "系统音 · Pop"
+          },
+          "Purr": {
+            "label": "系统音 · Purr"
+          },
+          "Sosumi": {
+            "label": "系统音 · Sosumi"
+          },
+          "Submarine": {
+            "label": "系统音 · Submarine"
+          },
+          "Tink": {
+            "label": "系统音 · Tink"
+          },
+          "custom": {
+            "label": "自定义音频文件"
+          }
+        }
+      },
+      "retryCustom": {
+        "label": "自动重试 · 自定义音频路径",
+        "placeholder": "选择“自定义音频文件”时填写，如 ~/Music/done.mp3"
+      },
+      "compactedSound": {
+        "label": "上下文压缩完成 · 声音",
+        "description": "长对话自动压缩上下文结束时",
+        "options": {
+          "none": {
+            "label": "不响"
+          },
+          "fun:cooking-done": {
+            "label": "趣味 · 料理出锅（咕嘟+叮咚）"
+          },
+          "fun:treasure": {
+            "label": "趣味 · 宝箱开启"
+          },
+          "fun:level-up": {
+            "label": "趣味 · 升级"
+          },
+          "fun:power-up": {
+            "label": "趣味 · 8-bit 能量充满"
+          },
+          "fun:coin": {
+            "label": "趣味 · 拾取金币"
+          },
+          "fun:magic-sparkle": {
+            "label": "趣味 · 魔法闪烁"
+          },
+          "fun:finch-chirp": {
+            "label": "趣味 · 小雀啾啾"
+          },
+          "fun:kalimba": {
+            "label": "趣味 · 拇指琴三连"
+          },
+          "fun:service-bell": {
+            "label": "趣味 · 柜台服务铃"
+          },
+          "fun:knock-knock": {
+            "label": "趣味 · 敲门两下"
+          },
+          "fun:typewriter-ding": {
+            "label": "趣味 · 打字机叮"
+          },
+          "fun:bubble-pop": {
+            "label": "趣味 · 水泡啵"
+          },
+          "fun:wah-wah": {
+            "label": "趣味 · 失败哇哇哇"
+          },
+          "fun:temple-bell": {
+            "label": "趣味 · 寺院钟声"
+          },
+          "Basso": {
+            "label": "系统音 · Basso"
+          },
+          "Blow": {
+            "label": "系统音 · Blow"
+          },
+          "Bottle": {
+            "label": "系统音 · Bottle"
+          },
+          "Frog": {
+            "label": "系统音 · Frog"
+          },
+          "Funk": {
+            "label": "系统音 · Funk"
+          },
+          "Glass": {
+            "label": "系统音 · Glass"
+          },
+          "Hero": {
+            "label": "系统音 · Hero"
+          },
+          "Morse": {
+            "label": "系统音 · Morse"
+          },
+          "Ping": {
+            "label": "系统音 · Ping"
+          },
+          "Pop": {
+            "label": "系统音 · Pop"
+          },
+          "Purr": {
+            "label": "系统音 · Purr"
+          },
+          "Sosumi": {
+            "label": "系统音 · Sosumi"
+          },
+          "Submarine": {
+            "label": "系统音 · Submarine"
+          },
+          "Tink": {
+            "label": "系统音 · Tink"
+          },
+          "custom": {
+            "label": "自定义音频文件"
+          }
+        }
+      },
+      "compactedCustom": {
+        "label": "上下文压缩完成 · 自定义音频路径",
+        "placeholder": "选择“自定义音频文件”时填写，如 ~/Music/done.mp3"
+      },
+      "toolErrorSound": {
+        "label": "工具报错 · 声音",
+        "description": "某次工具调用返回错误时（可能较频繁）",
+        "options": {
+          "none": {
+            "label": "不响"
+          },
+          "fun:cooking-done": {
+            "label": "趣味 · 料理出锅（咕嘟+叮咚）"
+          },
+          "fun:treasure": {
+            "label": "趣味 · 宝箱开启"
+          },
+          "fun:level-up": {
+            "label": "趣味 · 升级"
+          },
+          "fun:power-up": {
+            "label": "趣味 · 8-bit 能量充满"
+          },
+          "fun:coin": {
+            "label": "趣味 · 拾取金币"
+          },
+          "fun:magic-sparkle": {
+            "label": "趣味 · 魔法闪烁"
+          },
+          "fun:finch-chirp": {
+            "label": "趣味 · 小雀啾啾"
+          },
+          "fun:kalimba": {
+            "label": "趣味 · 拇指琴三连"
+          },
+          "fun:service-bell": {
+            "label": "趣味 · 柜台服务铃"
+          },
+          "fun:knock-knock": {
+            "label": "趣味 · 敲门两下"
+          },
+          "fun:typewriter-ding": {
+            "label": "趣味 · 打字机叮"
+          },
+          "fun:bubble-pop": {
+            "label": "趣味 · 水泡啵"
+          },
+          "fun:wah-wah": {
+            "label": "趣味 · 失败哇哇哇"
+          },
+          "fun:temple-bell": {
+            "label": "趣味 · 寺院钟声"
+          },
+          "Basso": {
+            "label": "系统音 · Basso"
+          },
+          "Blow": {
+            "label": "系统音 · Blow"
+          },
+          "Bottle": {
+            "label": "系统音 · Bottle"
+          },
+          "Frog": {
+            "label": "系统音 · Frog"
+          },
+          "Funk": {
+            "label": "系统音 · Funk"
+          },
+          "Glass": {
+            "label": "系统音 · Glass"
+          },
+          "Hero": {
+            "label": "系统音 · Hero"
+          },
+          "Morse": {
+            "label": "系统音 · Morse"
+          },
+          "Ping": {
+            "label": "系统音 · Ping"
+          },
+          "Pop": {
+            "label": "系统音 · Pop"
+          },
+          "Purr": {
+            "label": "系统音 · Purr"
+          },
+          "Sosumi": {
+            "label": "系统音 · Sosumi"
+          },
+          "Submarine": {
+            "label": "系统音 · Submarine"
+          },
+          "Tink": {
+            "label": "系统音 · Tink"
+          },
+          "custom": {
+            "label": "自定义音频文件"
+          }
+        }
+      },
+      "toolErrorCustom": {
+        "label": "工具报错 · 自定义音频路径",
+        "placeholder": "选择“自定义音频文件”时填写，如 ~/Music/done.mp3"
+      }
+    }
+  },
+  "cue.completed": "任务完成",
+  "cue.interrupted": "任务中断",
+  "cue.failed": "出错失败",
+  "cue.waiting": "等待确认",
+  "cue.started": "任务开始",
+  "cue.retry": "自动重试",
+  "cue.compacted": "上下文压缩完成",
+  "cue.toolError": "工具报错",
+  "menu.status": "状态 · {state}",
+  "state.off": "已关闭（在设置里打开）",
+  "state.muted": "已静音",
+  "state.on": "提示音开启中",
+  "menu.mute": "临时静音",
+  "menu.unmute": "取消静音",
+  "menu.preview": "试听",
+  "menu.bird": "放飞送信小鸟（预览）",
+  "toast.muted": "提示音已静音",
+  "toast.unmuted": "提示音已恢复",
+  "toast.missingFile": "找不到音频文件",
+  "toast.birdFailed": "小鸟没能放飞"
+}

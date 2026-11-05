@@ -1,0 +1,1235 @@
+{
+  "manifestVersion": 1,
+  "id": "finch-message-alert",
+  "minVersion": "1.8.0",
+  "name": "Finch Message Alerts",
+  "description": "Sound cues and a notch bird for Finch: pick a macOS system sound, one of 14 fun sounds or your own audio for task completed, interrupted, failed, waiting and more. When a task finishes, a little Finch bird with a mail bag pops out of the camera notch and hops along the menu bar; click it to open that conversation. macOS only.",
+  "main": "dist/index.js",
+  "activationEvents": [
+    "onStartup"
+  ],
+  "miniToolType": "community",
+  "categories": [
+    "productivity"
+  ],
+  "contributes": {
+    "settingsMenu": {
+      "icon": "music",
+      "tooltip": "Finch Message Alerts"
+    },
+    "tools": true
+  },
+  "permissions": {
+    "filesystem": "read",
+    "network": false,
+    "shell": true
+  },
+  "settings": {
+    "fields": [
+      {
+        "key": "enabled",
+        "type": "boolean",
+        "label": "Play sound cues",
+        "default": true
+      },
+      {
+        "key": "volume",
+        "type": "number",
+        "label": "Volume (0-100)",
+        "default": 60
+      },
+      {
+        "key": "onlyWhenUnviewed",
+        "type": "boolean",
+        "label": "Only when I am not looking",
+        "description": "Rings only when Finch is in the background or that conversation has an unread result",
+        "default": true
+      },
+      {
+        "key": "alwaysRing",
+        "type": "multiselect",
+        "label": "Always ring for these events",
+        "description": "Interruptions are usually your own doing, so they always ring by default",
+        "options": [
+          {
+            "value": "completed",
+            "label": "Task completed"
+          },
+          {
+            "value": "interrupted",
+            "label": "Task interrupted"
+          },
+          {
+            "value": "failed",
+            "label": "Failed"
+          },
+          {
+            "value": "waiting",
+            "label": "Waiting for you"
+          },
+          {
+            "value": "started",
+            "label": "Task started"
+          },
+          {
+            "value": "retry",
+            "label": "Auto retry"
+          },
+          {
+            "value": "compacted",
+            "label": "Context compacted"
+          },
+          {
+            "value": "toolError",
+            "label": "Tool error"
+          }
+        ],
+        "default": [
+          "interrupted"
+        ]
+      },
+      {
+        "key": "quietHours",
+        "type": "string",
+        "label": "Quiet hours",
+        "placeholder": "e.g. 23:00-08:00, leave empty to disable"
+      },
+      {
+        "key": "notchBird",
+        "type": "boolean",
+        "label": "Notch letter bird",
+        "description": "A Finch bird with a little mail bag pops out of the camera notch and hops, stretches, sings and naps in the menu bar left of the notch; hover to see the letter, click to open that conversation",
+        "default": true
+      },
+      {
+        "key": "notchBirdEvents",
+        "type": "multiselect",
+        "label": "Events that release the bird",
+        "options": [
+          {
+            "value": "completed",
+            "label": "Task completed"
+          },
+          {
+            "value": "interrupted",
+            "label": "Task interrupted"
+          },
+          {
+            "value": "failed",
+            "label": "Failed"
+          },
+          {
+            "value": "waiting",
+            "label": "Waiting for you"
+          },
+          {
+            "value": "started",
+            "label": "Task started"
+          },
+          {
+            "value": "retry",
+            "label": "Auto retry"
+          },
+          {
+            "value": "compacted",
+            "label": "Context compacted"
+          },
+          {
+            "value": "toolError",
+            "label": "Tool error"
+          }
+        ],
+        "default": [
+          "completed"
+        ]
+      },
+      {
+        "key": "notchBirdSeconds",
+        "type": "number",
+        "label": "How long the bird stays (seconds)",
+        "default": 15
+      },
+      {
+        "key": "completedSound",
+        "type": "select",
+        "label": "Task completed · Sound",
+        "description": "When an Agent run finishes",
+        "options": [
+          {
+            "value": "none",
+            "label": "Silent"
+          },
+          {
+            "value": "fun:cooking-done",
+            "label": "Fun · Dish served (bubble + ding)"
+          },
+          {
+            "value": "fun:treasure",
+            "label": "Fun · Treasure chest"
+          },
+          {
+            "value": "fun:level-up",
+            "label": "Fun · Level up"
+          },
+          {
+            "value": "fun:power-up",
+            "label": "Fun · 8-bit power-up"
+          },
+          {
+            "value": "fun:coin",
+            "label": "Fun · Coin pickup"
+          },
+          {
+            "value": "fun:magic-sparkle",
+            "label": "Fun · Magic sparkle"
+          },
+          {
+            "value": "fun:finch-chirp",
+            "label": "Fun · Finch chirp"
+          },
+          {
+            "value": "fun:kalimba",
+            "label": "Fun · Kalimba trio"
+          },
+          {
+            "value": "fun:service-bell",
+            "label": "Fun · Service bell"
+          },
+          {
+            "value": "fun:knock-knock",
+            "label": "Fun · Knock knock"
+          },
+          {
+            "value": "fun:typewriter-ding",
+            "label": "Fun · Typewriter ding"
+          },
+          {
+            "value": "fun:bubble-pop",
+            "label": "Fun · Bubble pop"
+          },
+          {
+            "value": "fun:wah-wah",
+            "label": "Fun · Wah-wah fail"
+          },
+          {
+            "value": "fun:temple-bell",
+            "label": "Fun · Temple bell"
+          },
+          {
+            "value": "Basso",
+            "label": "System · Basso"
+          },
+          {
+            "value": "Blow",
+            "label": "System · Blow"
+          },
+          {
+            "value": "Bottle",
+            "label": "System · Bottle"
+          },
+          {
+            "value": "Frog",
+            "label": "System · Frog"
+          },
+          {
+            "value": "Funk",
+            "label": "System · Funk"
+          },
+          {
+            "value": "Glass",
+            "label": "System · Glass"
+          },
+          {
+            "value": "Hero",
+            "label": "System · Hero"
+          },
+          {
+            "value": "Morse",
+            "label": "System · Morse"
+          },
+          {
+            "value": "Ping",
+            "label": "System · Ping"
+          },
+          {
+            "value": "Pop",
+            "label": "System · Pop"
+          },
+          {
+            "value": "Purr",
+            "label": "System · Purr"
+          },
+          {
+            "value": "Sosumi",
+            "label": "System · Sosumi"
+          },
+          {
+            "value": "Submarine",
+            "label": "System · Submarine"
+          },
+          {
+            "value": "Tink",
+            "label": "System · Tink"
+          },
+          {
+            "value": "custom",
+            "label": "Custom audio file"
+          }
+        ],
+        "default": "Glass"
+      },
+      {
+        "key": "completedCustom",
+        "type": "string",
+        "label": "Task completed · Custom audio path",
+        "placeholder": "Used with \"Custom audio file\", e.g. ~/Music/done.mp3"
+      },
+      {
+        "key": "interruptedSound",
+        "type": "select",
+        "label": "Task interrupted · Sound",
+        "description": "When you press Stop / Esc",
+        "options": [
+          {
+            "value": "none",
+            "label": "Silent"
+          },
+          {
+            "value": "fun:cooking-done",
+            "label": "Fun · Dish served (bubble + ding)"
+          },
+          {
+            "value": "fun:treasure",
+            "label": "Fun · Treasure chest"
+          },
+          {
+            "value": "fun:level-up",
+            "label": "Fun · Level up"
+          },
+          {
+            "value": "fun:power-up",
+            "label": "Fun · 8-bit power-up"
+          },
+          {
+            "value": "fun:coin",
+            "label": "Fun · Coin pickup"
+          },
+          {
+            "value": "fun:magic-sparkle",
+            "label": "Fun · Magic sparkle"
+          },
+          {
+            "value": "fun:finch-chirp",
+            "label": "Fun · Finch chirp"
+          },
+          {
+            "value": "fun:kalimba",
+            "label": "Fun · Kalimba trio"
+          },
+          {
+            "value": "fun:service-bell",
+            "label": "Fun · Service bell"
+          },
+          {
+            "value": "fun:knock-knock",
+            "label": "Fun · Knock knock"
+          },
+          {
+            "value": "fun:typewriter-ding",
+            "label": "Fun · Typewriter ding"
+          },
+          {
+            "value": "fun:bubble-pop",
+            "label": "Fun · Bubble pop"
+          },
+          {
+            "value": "fun:wah-wah",
+            "label": "Fun · Wah-wah fail"
+          },
+          {
+            "value": "fun:temple-bell",
+            "label": "Fun · Temple bell"
+          },
+          {
+            "value": "Basso",
+            "label": "System · Basso"
+          },
+          {
+            "value": "Blow",
+            "label": "System · Blow"
+          },
+          {
+            "value": "Bottle",
+            "label": "System · Bottle"
+          },
+          {
+            "value": "Frog",
+            "label": "System · Frog"
+          },
+          {
+            "value": "Funk",
+            "label": "System · Funk"
+          },
+          {
+            "value": "Glass",
+            "label": "System · Glass"
+          },
+          {
+            "value": "Hero",
+            "label": "System · Hero"
+          },
+          {
+            "value": "Morse",
+            "label": "System · Morse"
+          },
+          {
+            "value": "Ping",
+            "label": "System · Ping"
+          },
+          {
+            "value": "Pop",
+            "label": "System · Pop"
+          },
+          {
+            "value": "Purr",
+            "label": "System · Purr"
+          },
+          {
+            "value": "Sosumi",
+            "label": "System · Sosumi"
+          },
+          {
+            "value": "Submarine",
+            "label": "System · Submarine"
+          },
+          {
+            "value": "Tink",
+            "label": "System · Tink"
+          },
+          {
+            "value": "custom",
+            "label": "Custom audio file"
+          }
+        ],
+        "default": "Pop"
+      },
+      {
+        "key": "interruptedCustom",
+        "type": "string",
+        "label": "Task interrupted · Custom audio path",
+        "placeholder": "Used with \"Custom audio file\", e.g. ~/Music/done.mp3"
+      },
+      {
+        "key": "failedSound",
+        "type": "select",
+        "label": "Failed · Sound",
+        "description": "When a model or runtime error ends the run",
+        "options": [
+          {
+            "value": "none",
+            "label": "Silent"
+          },
+          {
+            "value": "fun:cooking-done",
+            "label": "Fun · Dish served (bubble + ding)"
+          },
+          {
+            "value": "fun:treasure",
+            "label": "Fun · Treasure chest"
+          },
+          {
+            "value": "fun:level-up",
+            "label": "Fun · Level up"
+          },
+          {
+            "value": "fun:power-up",
+            "label": "Fun · 8-bit power-up"
+          },
+          {
+            "value": "fun:coin",
+            "label": "Fun · Coin pickup"
+          },
+          {
+            "value": "fun:magic-sparkle",
+            "label": "Fun · Magic sparkle"
+          },
+          {
+            "value": "fun:finch-chirp",
+            "label": "Fun · Finch chirp"
+          },
+          {
+            "value": "fun:kalimba",
+            "label": "Fun · Kalimba trio"
+          },
+          {
+            "value": "fun:service-bell",
+            "label": "Fun · Service bell"
+          },
+          {
+            "value": "fun:knock-knock",
+            "label": "Fun · Knock knock"
+          },
+          {
+            "value": "fun:typewriter-ding",
+            "label": "Fun · Typewriter ding"
+          },
+          {
+            "value": "fun:bubble-pop",
+            "label": "Fun · Bubble pop"
+          },
+          {
+            "value": "fun:wah-wah",
+            "label": "Fun · Wah-wah fail"
+          },
+          {
+            "value": "fun:temple-bell",
+            "label": "Fun · Temple bell"
+          },
+          {
+            "value": "Basso",
+            "label": "System · Basso"
+          },
+          {
+            "value": "Blow",
+            "label": "System · Blow"
+          },
+          {
+            "value": "Bottle",
+            "label": "System · Bottle"
+          },
+          {
+            "value": "Frog",
+            "label": "System · Frog"
+          },
+          {
+            "value": "Funk",
+            "label": "System · Funk"
+          },
+          {
+            "value": "Glass",
+            "label": "System · Glass"
+          },
+          {
+            "value": "Hero",
+            "label": "System · Hero"
+          },
+          {
+            "value": "Morse",
+            "label": "System · Morse"
+          },
+          {
+            "value": "Ping",
+            "label": "System · Ping"
+          },
+          {
+            "value": "Pop",
+            "label": "System · Pop"
+          },
+          {
+            "value": "Purr",
+            "label": "System · Purr"
+          },
+          {
+            "value": "Sosumi",
+            "label": "System · Sosumi"
+          },
+          {
+            "value": "Submarine",
+            "label": "System · Submarine"
+          },
+          {
+            "value": "Tink",
+            "label": "System · Tink"
+          },
+          {
+            "value": "custom",
+            "label": "Custom audio file"
+          }
+        ],
+        "default": "Basso"
+      },
+      {
+        "key": "failedCustom",
+        "type": "string",
+        "label": "Failed · Custom audio path",
+        "placeholder": "Used with \"Custom audio file\", e.g. ~/Music/done.mp3"
+      },
+      {
+        "key": "waitingSound",
+        "type": "select",
+        "label": "Waiting for you · Sound",
+        "description": "When a permission card, question or form needs you",
+        "options": [
+          {
+            "value": "none",
+            "label": "Silent"
+          },
+          {
+            "value": "fun:cooking-done",
+            "label": "Fun · Dish served (bubble + ding)"
+          },
+          {
+            "value": "fun:treasure",
+            "label": "Fun · Treasure chest"
+          },
+          {
+            "value": "fun:level-up",
+            "label": "Fun · Level up"
+          },
+          {
+            "value": "fun:power-up",
+            "label": "Fun · 8-bit power-up"
+          },
+          {
+            "value": "fun:coin",
+            "label": "Fun · Coin pickup"
+          },
+          {
+            "value": "fun:magic-sparkle",
+            "label": "Fun · Magic sparkle"
+          },
+          {
+            "value": "fun:finch-chirp",
+            "label": "Fun · Finch chirp"
+          },
+          {
+            "value": "fun:kalimba",
+            "label": "Fun · Kalimba trio"
+          },
+          {
+            "value": "fun:service-bell",
+            "label": "Fun · Service bell"
+          },
+          {
+            "value": "fun:knock-knock",
+            "label": "Fun · Knock knock"
+          },
+          {
+            "value": "fun:typewriter-ding",
+            "label": "Fun · Typewriter ding"
+          },
+          {
+            "value": "fun:bubble-pop",
+            "label": "Fun · Bubble pop"
+          },
+          {
+            "value": "fun:wah-wah",
+            "label": "Fun · Wah-wah fail"
+          },
+          {
+            "value": "fun:temple-bell",
+            "label": "Fun · Temple bell"
+          },
+          {
+            "value": "Basso",
+            "label": "System · Basso"
+          },
+          {
+            "value": "Blow",
+            "label": "System · Blow"
+          },
+          {
+            "value": "Bottle",
+            "label": "System · Bottle"
+          },
+          {
+            "value": "Frog",
+            "label": "System · Frog"
+          },
+          {
+            "value": "Funk",
+            "label": "System · Funk"
+          },
+          {
+            "value": "Glass",
+            "label": "System · Glass"
+          },
+          {
+            "value": "Hero",
+            "label": "System · Hero"
+          },
+          {
+            "value": "Morse",
+            "label": "System · Morse"
+          },
+          {
+            "value": "Ping",
+            "label": "System · Ping"
+          },
+          {
+            "value": "Pop",
+            "label": "System · Pop"
+          },
+          {
+            "value": "Purr",
+            "label": "System · Purr"
+          },
+          {
+            "value": "Sosumi",
+            "label": "System · Sosumi"
+          },
+          {
+            "value": "Submarine",
+            "label": "System · Submarine"
+          },
+          {
+            "value": "Tink",
+            "label": "System · Tink"
+          },
+          {
+            "value": "custom",
+            "label": "Custom audio file"
+          }
+        ],
+        "default": "Ping"
+      },
+      {
+        "key": "waitingCustom",
+        "type": "string",
+        "label": "Waiting for you · Custom audio path",
+        "placeholder": "Used with \"Custom audio file\", e.g. ~/Music/done.mp3"
+      },
+      {
+        "key": "startedSound",
+        "type": "select",
+        "label": "Task started · Sound",
+        "description": "When a run starts (handy for scheduled or background tasks)",
+        "options": [
+          {
+            "value": "none",
+            "label": "Silent"
+          },
+          {
+            "value": "fun:cooking-done",
+            "label": "Fun · Dish served (bubble + ding)"
+          },
+          {
+            "value": "fun:treasure",
+            "label": "Fun · Treasure chest"
+          },
+          {
+            "value": "fun:level-up",
+            "label": "Fun · Level up"
+          },
+          {
+            "value": "fun:power-up",
+            "label": "Fun · 8-bit power-up"
+          },
+          {
+            "value": "fun:coin",
+            "label": "Fun · Coin pickup"
+          },
+          {
+            "value": "fun:magic-sparkle",
+            "label": "Fun · Magic sparkle"
+          },
+          {
+            "value": "fun:finch-chirp",
+            "label": "Fun · Finch chirp"
+          },
+          {
+            "value": "fun:kalimba",
+            "label": "Fun · Kalimba trio"
+          },
+          {
+            "value": "fun:service-bell",
+            "label": "Fun · Service bell"
+          },
+          {
+            "value": "fun:knock-knock",
+            "label": "Fun · Knock knock"
+          },
+          {
+            "value": "fun:typewriter-ding",
+            "label": "Fun · Typewriter ding"
+          },
+          {
+            "value": "fun:bubble-pop",
+            "label": "Fun · Bubble pop"
+          },
+          {
+            "value": "fun:wah-wah",
+            "label": "Fun · Wah-wah fail"
+          },
+          {
+            "value": "fun:temple-bell",
+            "label": "Fun · Temple bell"
+          },
+          {
+            "value": "Basso",
+            "label": "System · Basso"
+          },
+          {
+            "value": "Blow",
+            "label": "System · Blow"
+          },
+          {
+            "value": "Bottle",
+            "label": "System · Bottle"
+          },
+          {
+            "value": "Frog",
+            "label": "System · Frog"
+          },
+          {
+            "value": "Funk",
+            "label": "System · Funk"
+          },
+          {
+            "value": "Glass",
+            "label": "System · Glass"
+          },
+          {
+            "value": "Hero",
+            "label": "System · Hero"
+          },
+          {
+            "value": "Morse",
+            "label": "System · Morse"
+          },
+          {
+            "value": "Ping",
+            "label": "System · Ping"
+          },
+          {
+            "value": "Pop",
+            "label": "System · Pop"
+          },
+          {
+            "value": "Purr",
+            "label": "System · Purr"
+          },
+          {
+            "value": "Sosumi",
+            "label": "System · Sosumi"
+          },
+          {
+            "value": "Submarine",
+            "label": "System · Submarine"
+          },
+          {
+            "value": "Tink",
+            "label": "System · Tink"
+          },
+          {
+            "value": "custom",
+            "label": "Custom audio file"
+          }
+        ],
+        "default": "none"
+      },
+      {
+        "key": "startedCustom",
+        "type": "string",
+        "label": "Task started · Custom audio path",
+        "placeholder": "Used with \"Custom audio file\", e.g. ~/Music/done.mp3"
+      },
+      {
+        "key": "retrySound",
+        "type": "select",
+        "label": "Auto retry · Sound",
+        "description": "When a request failed and is waiting to retry",
+        "options": [
+          {
+            "value": "none",
+            "label": "Silent"
+          },
+          {
+            "value": "fun:cooking-done",
+            "label": "Fun · Dish served (bubble + ding)"
+          },
+          {
+            "value": "fun:treasure",
+            "label": "Fun · Treasure chest"
+          },
+          {
+            "value": "fun:level-up",
+            "label": "Fun · Level up"
+          },
+          {
+            "value": "fun:power-up",
+            "label": "Fun · 8-bit power-up"
+          },
+          {
+            "value": "fun:coin",
+            "label": "Fun · Coin pickup"
+          },
+          {
+            "value": "fun:magic-sparkle",
+            "label": "Fun · Magic sparkle"
+          },
+          {
+            "value": "fun:finch-chirp",
+            "label": "Fun · Finch chirp"
+          },
+          {
+            "value": "fun:kalimba",
+            "label": "Fun · Kalimba trio"
+          },
+          {
+            "value": "fun:service-bell",
+            "label": "Fun · Service bell"
+          },
+          {
+            "value": "fun:knock-knock",
+            "label": "Fun · Knock knock"
+          },
+          {
+            "value": "fun:typewriter-ding",
+            "label": "Fun · Typewriter ding"
+          },
+          {
+            "value": "fun:bubble-pop",
+            "label": "Fun · Bubble pop"
+          },
+          {
+            "value": "fun:wah-wah",
+            "label": "Fun · Wah-wah fail"
+          },
+          {
+            "value": "fun:temple-bell",
+            "label": "Fun · Temple bell"
+          },
+          {
+            "value": "Basso",
+            "label": "System · Basso"
+          },
+          {
+            "value": "Blow",
+            "label": "System · Blow"
+          },
+          {
+            "value": "Bottle",
+            "label": "System · Bottle"
+          },
+          {
+            "value": "Frog",
+            "label": "System · Frog"
+          },
+          {
+            "value": "Funk",
+            "label": "System · Funk"
+          },
+          {
+            "value": "Glass",
+            "label": "System · Glass"
+          },
+          {
+            "value": "Hero",
+            "label": "System · Hero"
+          },
+          {
+            "value": "Morse",
+            "label": "System · Morse"
+          },
+          {
+            "value": "Ping",
+            "label": "System · Ping"
+          },
+          {
+            "value": "Pop",
+            "label": "System · Pop"
+          },
+          {
+            "value": "Purr",
+            "label": "System · Purr"
+          },
+          {
+            "value": "Sosumi",
+            "label": "System · Sosumi"
+          },
+          {
+            "value": "Submarine",
+            "label": "System · Submarine"
+          },
+          {
+            "value": "Tink",
+            "label": "System · Tink"
+          },
+          {
+            "value": "custom",
+            "label": "Custom audio file"
+          }
+        ],
+        "default": "none"
+      },
+      {
+        "key": "retryCustom",
+        "type": "string",
+        "label": "Auto retry · Custom audio path",
+        "placeholder": "Used with \"Custom audio file\", e.g. ~/Music/done.mp3"
+      },
+      {
+        "key": "compactedSound",
+        "type": "select",
+        "label": "Context compacted · Sound",
+        "description": "When a long conversation finishes compacting its context",
+        "options": [
+          {
+            "value": "none",
+            "label": "Silent"
+          },
+          {
+            "value": "fun:cooking-done",
+            "label": "Fun · Dish served (bubble + ding)"
+          },
+          {
+            "value": "fun:treasure",
+            "label": "Fun · Treasure chest"
+          },
+          {
+            "value": "fun:level-up",
+            "label": "Fun · Level up"
+          },
+          {
+            "value": "fun:power-up",
+            "label": "Fun · 8-bit power-up"
+          },
+          {
+            "value": "fun:coin",
+            "label": "Fun · Coin pickup"
+          },
+          {
+            "value": "fun:magic-sparkle",
+            "label": "Fun · Magic sparkle"
+          },
+          {
+            "value": "fun:finch-chirp",
+            "label": "Fun · Finch chirp"
+          },
+          {
+            "value": "fun:kalimba",
+            "label": "Fun · Kalimba trio"
+          },
+          {
+            "value": "fun:service-bell",
+            "label": "Fun · Service bell"
+          },
+          {
+            "value": "fun:knock-knock",
+            "label": "Fun · Knock knock"
+          },
+          {
+            "value": "fun:typewriter-ding",
+            "label": "Fun · Typewriter ding"
+          },
+          {
+            "value": "fun:bubble-pop",
+            "label": "Fun · Bubble pop"
+          },
+          {
+            "value": "fun:wah-wah",
+            "label": "Fun · Wah-wah fail"
+          },
+          {
+            "value": "fun:temple-bell",
+            "label": "Fun · Temple bell"
+          },
+          {
+            "value": "Basso",
+            "label": "System · Basso"
+          },
+          {
+            "value": "Blow",
+            "label": "System · Blow"
+          },
+          {
+            "value": "Bottle",
+            "label": "System · Bottle"
+          },
+          {
+            "value": "Frog",
+            "label": "System · Frog"
+          },
+          {
+            "value": "Funk",
+            "label": "System · Funk"
+          },
+          {
+            "value": "Glass",
+            "label": "System · Glass"
+          },
+          {
+            "value": "Hero",
+            "label": "System · Hero"
+          },
+          {
+            "value": "Morse",
+            "label": "System · Morse"
+          },
+          {
+            "value": "Ping",
+            "label": "System · Ping"
+          },
+          {
+            "value": "Pop",
+            "label": "System · Pop"
+          },
+          {
+            "value": "Purr",
+            "label": "System · Purr"
+          },
+          {
+            "value": "Sosumi",
+            "label": "System · Sosumi"
+          },
+          {
+            "value": "Submarine",
+            "label": "System · Submarine"
+          },
+          {
+            "value": "Tink",
+            "label": "System · Tink"
+          },
+          {
+            "value": "custom",
+            "label": "Custom audio file"
+          }
+        ],
+        "default": "none"
+      },
+      {
+        "key": "compactedCustom",
+        "type": "string",
+        "label": "Context compacted · Custom audio path",
+        "placeholder": "Used with \"Custom audio file\", e.g. ~/Music/done.mp3"
+      },
+      {
+        "key": "toolErrorSound",
+        "type": "select",
+        "label": "Tool error · Sound",
+        "description": "When a tool call returns an error (can be frequent)",
+        "options": [
+          {
+            "value": "none",
+            "label": "Silent"
+          },
+          {
+            "value": "fun:cooking-done",
+            "label": "Fun · Dish served (bubble + ding)"
+          },
+          {
+            "value": "fun:treasure",
+            "label": "Fun · Treasure chest"
+          },
+          {
+            "value": "fun:level-up",
+            "label": "Fun · Level up"
+          },
+          {
+            "value": "fun:power-up",
+            "label": "Fun · 8-bit power-up"
+          },
+          {
+            "value": "fun:coin",
+            "label": "Fun · Coin pickup"
+          },
+          {
+            "value": "fun:magic-sparkle",
+            "label": "Fun · Magic sparkle"
+          },
+          {
+            "value": "fun:finch-chirp",
+            "label": "Fun · Finch chirp"
+          },
+          {
+            "value": "fun:kalimba",
+            "label": "Fun · Kalimba trio"
+          },
+          {
+            "value": "fun:service-bell",
+            "label": "Fun · Service bell"
+          },
+          {
+            "value": "fun:knock-knock",
+            "label": "Fun · Knock knock"
+          },
+          {
+            "value": "fun:typewriter-ding",
+            "label": "Fun · Typewriter ding"
+          },
+          {
+            "value": "fun:bubble-pop",
+            "label": "Fun · Bubble pop"
+          },
+          {
+            "value": "fun:wah-wah",
+            "label": "Fun · Wah-wah fail"
+          },
+          {
+            "value": "fun:temple-bell",
+            "label": "Fun · Temple bell"
+          },
+          {
+            "value": "Basso",
+            "label": "System · Basso"
+          },
+          {
+            "value": "Blow",
+            "label": "System · Blow"
+          },
+          {
+            "value": "Bottle",
+            "label": "System · Bottle"
+          },
+          {
+            "value": "Frog",
+            "label": "System · Frog"
+          },
+          {
+            "value": "Funk",
+            "label": "System · Funk"
+          },
+          {
+            "value": "Glass",
+            "label": "System · Glass"
+          },
+          {
+            "value": "Hero",
+            "label": "System · Hero"
+          },
+          {
+            "value": "Morse",
+            "label": "System · Morse"
+          },
+          {
+            "value": "Ping",
+            "label": "System · Ping"
+          },
+          {
+            "value": "Pop",
+            "label": "System · Pop"
+          },
+          {
+            "value": "Purr",
+            "label": "System · Purr"
+          },
+          {
+            "value": "Sosumi",
+            "label": "System · Sosumi"
+          },
+          {
+            "value": "Submarine",
+            "label": "System · Submarine"
+          },
+          {
+            "value": "Tink",
+            "label": "System · Tink"
+          },
+          {
+            "value": "custom",
+            "label": "Custom audio file"
+          }
+        ],
+        "default": "none"
+      },
+      {
+        "key": "toolErrorCustom",
+        "type": "string",
+        "label": "Tool error · Custom audio path",
+        "placeholder": "Used with \"Custom audio file\", e.g. ~/Music/done.mp3"
+      }
+    ]
+  },
+  "systemPrompt": "Finch Message Alerts plays sound cues and a notch bird on Finch task events; use message_alert_preview only when the user asks to preview a sound or the bird."
+}

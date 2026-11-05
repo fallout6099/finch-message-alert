@@ -1,0 +1,52 @@
+{
+  "name": "@alvinzhang/finch-message-alert",
+  "version": "0.5.1",
+  "type": "module",
+  "description": "Finch Message Alerts: sound cues and a notch letter bird for Finch task events (macOS).",
+  "keywords": [
+    "finch",
+    "finch-mini-tool",
+    "notification",
+    "sound",
+    "notch",
+    "macos"
+  ],
+  "license": "MIT",
+  "author": "alvinzhang",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fallout6099/finch-message-alert.git"
+  },
+  "homepage": "https://github.com/fallout6099/finch-message-alert#readme",
+  "bugs": {
+    "url": "https://github.com/fallout6099/finch-message-alert/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "os": [
+    "darwin"
+  ],
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node scripts/selftest.mjs",
+    "prepublishOnly": "npm test"
+  },
+  "devDependencies": {
+    "@finchtoys/minitool-api": "^0.3.15",
+    "@types/node": "^24.0.0",
+    "typescript": "^5.6.0"
+  },
+  "files": [
+    "dist/",
+    "assets/",
+    "sounds/",
+    "i18n/",
+    "finch.json",
+    "icon.png",
+    "README.md",
+    "LICENSE"
+  ]
+}

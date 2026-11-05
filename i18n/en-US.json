@@ -1,0 +1,22 @@
+{
+  "cue.completed": "Task completed",
+  "cue.interrupted": "Task interrupted",
+  "cue.failed": "Failed",
+  "cue.waiting": "Waiting for you",
+  "cue.started": "Task started",
+  "cue.retry": "Auto retry",
+  "cue.compacted": "Context compacted",
+  "cue.toolError": "Tool error",
+  "menu.status": "Status · {state}",
+  "state.off": "Off (turn it on in Settings)",
+  "state.muted": "Muted",
+  "state.on": "Sound cues on",
+  "menu.mute": "Mute for now",
+  "menu.unmute": "Unmute",
+  "menu.preview": "Preview",
+  "menu.bird": "Release the notch bird (preview)",
+  "toast.muted": "Sound cues muted",
+  "toast.unmuted": "Sound cues back on",
+  "toast.missingFile": "Audio file not found",
+  "toast.birdFailed": "The bird could not fly out"
+}
