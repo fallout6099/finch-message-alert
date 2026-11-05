@@ -108,7 +108,7 @@ export function activate(ctx: finch.MiniToolContext): void {
   const birdEvents = () => new Set(s.get<string[]>('notchBirdEvents') ?? ['completed']);
   const bird = createNotchBird(ctx, {
     seconds: () => Number(s.get<number>('notchBirdSeconds') ?? 15) || 15,
-    untilClick: () => s.get<boolean>('notchBirdUntilClick') ?? false,
+    untilClick: () => s.get<boolean>('notchBirdUntilClick') ?? true,
     onOpen: (sid) => {
       void ctx.navigation.openSession(sid).catch((e) => ctx.logger.warn('open session failed', String(e)));
       execFile('osascript', ['-e', 'tell application "Finch" to activate'], { timeout: 2000 }, () => undefined);
