@@ -147,7 +147,15 @@
         "key": "notchBirdSeconds",
         "type": "number",
         "label": "How long the bird stays (seconds)",
+        "description": "Ignored when \"Stay until I click it\" is on",
         "default": 15
+      },
+      {
+        "key": "notchBirdUntilClick",
+        "type": "boolean",
+        "label": "Stay until I click it",
+        "description": "The bird keeps waiting in the menu bar until you click it to open the conversation. It also flies home once you have read the conversation some other way",
+        "default": false
       },
       {
         "key": "completedSound",

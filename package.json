@@ -1,6 +1,6 @@
 {
   "name": "@alvinzhang/finch-message-alert",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "type": "module",
   "description": "Finch Message Alerts: sound cues and a notch letter bird for Finch task events (macOS).",
   "keywords": [

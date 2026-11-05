@@ -108,12 +108,22 @@ export function activate(ctx: finch.MiniToolContext): void {
   const birdEvents = () => new Set(s.get<string[]>('notchBirdEvents') ?? ['completed']);
   const bird = createNotchBird(ctx, {
     seconds: () => Number(s.get<number>('notchBirdSeconds') ?? 15) || 15,
+    untilClick: () => s.get<boolean>('notchBirdUntilClick') ?? false,
     onOpen: (sid) => {
       void ctx.navigation.openSession(sid).catch((e) => ctx.logger.warn('open session failed', String(e)));
       execFile('osascript', ['-e', 'tell application "Finch" to activate'], { timeout: 2000 }, () => undefined);
     },
   });
   ctx.subscriptions.push({ dispose: () => bird.dispose() });
+
+  // In stay-until-click mode the bird also flies home once its letters are read some other way.
+  // Only after an unread conversation was seen while it is out, so it never vanishes on arrival.
+  let unreadWhileBird = false;
+  ctx.subscriptions.push(ctx.status.onDidChange((st) => {
+    if (!bird.isOut()) { unreadWhileBird = false; return; }
+    if (st.unreadCount > 0) unreadWhileBird = true;
+    else if (unreadWhileBird) { unreadWhileBird = false; bird.lettersRead(); }
+  }));
 
   async function fire(cue: CueEvent, sid: string, since = Date.now()): Promise<void> {
     if (!enabled()) return;
@@ -127,7 +137,11 @@ export function activate(ctx: finch.MiniToolContext): void {
     }
     // Two runs finishing together: the second sound would be swallowed by the gap, so delay it instead.
     if (file && !play(file)) setTimeout(() => play(file, true), GLOBAL_GAP_MS);
-    if (wantsBird) void bird.show(sid).catch((e) => ctx.logger.warn('bird failed', String(e)));
+    if (wantsBird) {
+      const seen = (unreadSeen.get(sid) ?? 0) >= since - 1500;
+      unreadWhileBird = seen || (unreadWhileBird && bird.isOut());
+      void bird.show(sid).catch((e) => ctx.logger.warn('bird failed', String(e)));
+    }
   }
 
   function onCue(cue: CueEvent, sid: string): void {

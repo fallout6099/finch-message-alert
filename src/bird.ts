@@ -54,6 +54,10 @@ export interface BirdReport {
 
 export interface NotchBird {
   show(sessionId?: string, staySeconds?: number): Promise<BirdReport>;
+  /** Call when Finch reports no unread conversations left. */
+  lettersRead(): void;
+  /** Whether a bird is on screen and not already flying home. */
+  isOut(): boolean;
   bounds(): Promise<finch.CanvasBounds | undefined>;
   dispose(): void;
 }
@@ -63,7 +67,7 @@ type Phase = 'idle' | 'emerge' | 'roam' | 'hover' | 'happy' | 'leave';
 /** Finch mascot with a letter: pops out of the camera notch and hops along the menu bar to its left. */
 export function createNotchBird(
   ctx: finch.MiniToolContext,
-  opts: { seconds: () => number; onOpen: (sessionId: string) => void },
+  opts: { seconds: () => number; untilClick: () => boolean; onOpen: (sessionId: string) => void },
 ): NotchBird {
   let win: finch.CanvasWindow | undefined;
   let geo: NotchGeometry | undefined;
@@ -75,6 +79,9 @@ export function createNotchBird(
   let steps: NodeJS.Timeout[] = [];
   let stayTimer: NodeJS.Timeout | undefined;
   let gen = 0;
+  // A preview with explicit seconds is always timed; otherwise the setting decides.
+  let timedPreview = false;
+  const staysUntilClick = () => !timedPreview && opts.untilClick();
   // Actions come from a shuffled deck so none repeats until all have played (kept across releases).
   let deck: string[] = [];
   let lastAct = '';
@@ -91,9 +98,10 @@ export function createNotchBird(
   const later = (ms: number, fn: () => void) => { steps.push(setTimeout(fn, ms)); };
   const clearSteps = () => { steps.forEach(clearTimeout); steps = []; };
   const clearStay = () => { if (stayTimer) clearTimeout(stayTimer); stayTimer = undefined; };
-  const armStay = (sec = Math.max(5, opts.seconds())) => {
+  const armStay = (sec?: number) => {
     clearStay();
-    stayTimer = setTimeout(() => leave(), sec * 1000);
+    if (sec === undefined && staysUntilClick()) return; // waits for a click (or for the letters to be read)
+    stayTimer = setTimeout(() => leave(), (sec ?? Math.max(5, opts.seconds())) * 1000);
   };
 
   async function geometry(): Promise<NotchGeometry | undefined> {
@@ -233,7 +241,7 @@ export function createNotchBird(
         post({ type: 'mode', mode: 'stand' });
       } else if (!msg.on && phase === 'hover') {
         phase = 'roam';
-        armStay(5);
+        if (!staysUntilClick()) armStay(5);
         later(500, roam);
       }
     }
@@ -284,7 +292,7 @@ export function createNotchBird(
 
   async function show(sid?: string, staySeconds?: number): Promise<BirdReport> {
     if (win && phase !== 'leave') {
-      if (sid) sessionId = sid;
+      if (sid) { sessionId = sid; timedPreview = false; } // a real letter follows the setting
       count += 1;
       post({ type: 'letters', count });
       if (phase !== 'hover' && phase !== 'happy') armStay(); // a new letter extends the stay
@@ -299,6 +307,7 @@ export function createNotchBird(
     const myGen = ++gen;
     sessionId = sid;
     count = 1;
+    timedPreview = staySeconds !== undefined;
 
     let w: finch.CanvasWindow | undefined;
     let aboveMenuBar = true;
@@ -324,8 +333,16 @@ export function createNotchBird(
     return { geometry: geom, requested, actual, aboveMenuBar };
   }
 
+  /** Every letter was read elsewhere (e.g. you opened the conversation yourself): fly home. */
+  function lettersRead(): void {
+    if (!win || !sessionId || !staysUntilClick()) return;
+    if (phase === 'roam' || phase === 'hover' || phase === 'emerge') leave();
+  }
+
   return {
     show,
+    lettersRead,
+    isOut: () => Boolean(win) && phase !== 'leave' && phase !== 'idle',
     bounds: async () => win?.getBounds().catch(() => undefined),
     dispose: close,
   };

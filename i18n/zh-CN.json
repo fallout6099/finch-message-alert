@@ -86,7 +86,12 @@
         }
       },
       "notchBirdSeconds": {
-        "label": "小鸟停留秒数"
+        "label": "小鸟停留秒数",
+        "description": "打开“一直停留，直到我点它”时不生效"
+      },
+      "notchBirdUntilClick": {
+        "label": "一直停留，直到我点它",
+        "description": "小鸟一直在菜单栏里等着，点它打开会话后才飞走。如果你已经从别处看过这些会话，它也会自己飞回去"
       },
       "completedSound": {
         "label": "任务完成 · 声音",
