@@ -22,7 +22,7 @@ const BG_DONE_TTL_MS = 8000;
 
 interface SessionState {
   terminalFired: boolean;
-  pendingTerminal?: { cue: CueEvent; timer: NodeJS.Timeout };
+  pendingTerminal?: { cue: CueEvent; timer: NodeJS.Timeout; since: number };
   waiting: boolean;
   startedFired: boolean;
   lastRetryAt: number;
@@ -78,16 +78,30 @@ export function activate(ctx: finch.MiniToolContext): void {
     });
   }
 
-  async function isUnviewed(sid: string): Promise<boolean> {
+  // Status only exposes the *latest* unread session, so remember every session that has been the
+  // latest unread at some point: when two runs finish close together, both still count as unread.
+  const unreadSeen = new Map<string, number>();
+  const noteStatus = (st: finch.FinchStatusSnapshot) => {
+    if (st.unreadCount > 0 && st.latestUnreadSessionId) unreadSeen.set(st.latestUnreadSessionId, Date.now());
+  };
+  ctx.subscriptions.push(ctx.status.onDidChange(noteStatus));
+
+  async function isUnviewed(sid: string, since: number): Promise<boolean> {
     const bg = bgDone.get(sid);
     if (bg && Date.now() - bg < BG_DONE_TTL_MS) return true;
     if (!(await isFinchFrontmost())) return true;
-    try {
-      const st = await ctx.status.get();
-      return st.unreadCount > 0 && st.latestUnreadSessionId === sid;
-    } catch {
-      return false;
+    // Finch is in front: the run counts as unviewed if it became unread. The unread flag can land a
+    // little after the run's terminal event, so check a few times before giving up.
+    for (let i = 0; i < 4; i++) {
+      if ((unreadSeen.get(sid) ?? 0) >= since - 1500) return true;
+      try {
+        const st = await ctx.status.get();
+        noteStatus(st);
+        if (st.unreadCount > 0 && st.latestUnreadSessionId === sid) return true;
+      } catch { /* ignore and retry */ }
+      if (i < 3) await new Promise((r) => setTimeout(r, 400));
     }
+    return false;
   }
 
   const birdOn = () => s.get<boolean>('notchBird') ?? true;
@@ -101,14 +115,18 @@ export function activate(ctx: finch.MiniToolContext): void {
   });
   ctx.subscriptions.push({ dispose: () => bird.dispose() });
 
-  async function fire(cue: CueEvent, sid: string): Promise<void> {
+  async function fire(cue: CueEvent, sid: string, since = Date.now()): Promise<void> {
     if (!enabled()) return;
     // Sound obeys mute + quiet hours; the bird is silent, so it only obeys its own switch.
     const file = muted || inQuietHours(s.get<string>('quietHours'), new Date()) ? undefined : soundFor(cue);
     const wantsBird = birdOn() && birdEvents().has(cue);
     if (!file && !wantsBird) return;
-    if (onlyUnviewed() && !alwaysRing().has(cue) && !(await isUnviewed(sid))) return;
-    if (file) play(file);
+    if (onlyUnviewed() && !alwaysRing().has(cue) && !(await isUnviewed(sid, since))) {
+      ctx.logger.info(`skipped ${cue}: the conversation is being viewed`);
+      return;
+    }
+    // Two runs finishing together: the second sound would be swallowed by the gap, so delay it instead.
+    if (file && !play(file)) setTimeout(() => play(file, true), GLOBAL_GAP_MS);
     if (wantsBird) void bird.show(sid).catch((e) => ctx.logger.warn('bird failed', String(e)));
   }
 
@@ -136,14 +154,15 @@ export function activate(ctx: finch.MiniToolContext): void {
         if ((TERMINAL_PRIORITY[pending.cue] ?? 0) >= prio) return;
         clearTimeout(pending.timer);
       }
+      const since = pending?.since ?? now;
       const timer = setTimeout(() => {
         const chosen = st.pendingTerminal?.cue ?? cue;
         st.pendingTerminal = undefined;
         st.terminalFired = true;
         st.startedFired = false;
-        void fire(chosen, sid);
+        void fire(chosen, sid, since);
       }, TERMINAL_SETTLE_MS);
-      st.pendingTerminal = { cue, timer };
+      st.pendingTerminal = { cue, timer, since };
       return;
     }
 
